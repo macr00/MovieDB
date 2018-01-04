@@ -1,5 +1,6 @@
 package com.moviedb.di
 
+import com.moviedb.data.MovieDatabaseApi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -36,6 +37,10 @@ class ApiModule {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
                 .build()
+    }
+
+    fun provideApi(retrofit: Retrofit): MovieDatabaseApi {
+        return retrofit.create(MovieDatabaseApi::class.java)
     }
 
     companion object {
