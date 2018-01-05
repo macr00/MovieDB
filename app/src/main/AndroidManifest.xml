@@ -16,8 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.base.BaseFragmentActivity">
-        </activity>
         <activity android:name=".ui.details.MovieDetailActivity">
         </activity>
     </application>
