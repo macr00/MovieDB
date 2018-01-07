@@ -6,7 +6,7 @@ import com.moviedb.domain.schedulers.RxSchedulers
 import com.moviedb.domain.usecase.GetMovieListUseCase
 import com.moviedb.domain.usecase.SearchMoviesUseCase
 import com.moviedb.ui.base.BaseViewModel
-import io.reactivex.processors.FlowableProcessor
+import io.reactivex.Flowable
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -14,7 +14,7 @@ class MovieListViewModel(
         private val getAllUseCase: GetMovieListUseCase,
         private val searchUseCase: SearchMoviesUseCase,
         private val schedulers: RxSchedulers
-): BaseViewModel() {
+) : BaseViewModel() {
 
     fun getAllMovies() {
         getAllMovies(GetMovieListInteractor(null))
@@ -32,13 +32,15 @@ class MovieListViewModel(
                 ))
     }
 
-    fun searchMovies(query: FlowableProcessor<String>) {
+    fun searchMovies(query: Flowable<CharSequence>) {
         disposables.add(query
-                .filter { it.isNotEmpty() && it.length > 1 }
                 .debounce(500, TimeUnit.MILLISECONDS, schedulers.uiScheduler)
-                .observeOn(schedulers.uiScheduler)
-                .map { SearchMoviesInteractor(it) }
-                .flatMap { searchUseCase.execute(it) }
+                .filter { it.length > 1 }
+                .map { it.toString().trim { it <= ' ' } }
+                .switchMap {
+                    searchUseCase.execute(SearchMoviesInteractor(it))
+                            .onErrorResumeNext(Flowable.empty())
+                }
                 .subscribe(
                         {},
                         {}
