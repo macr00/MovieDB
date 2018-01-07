@@ -1,6 +1,6 @@
-package com.moviedb.data
+package com.moviedb.data.model
 
-data class MovieListResultObject(
+class MovieDetailData(
         val id: Long,
         val releaseDate: String,
         val title: String,
@@ -8,7 +8,7 @@ data class MovieListResultObject(
         val originalLanguage: String,
         val posterPath: String,
         val backdropPath: String,
-        val genreIds: List<Int>,
+        val genreIds: List<GenreObject>,
         val voteCount: Int,
         val voteAverage: Double,
         val adult: Boolean
