@@ -13,6 +13,6 @@ class GetMovieListUseCase(
 ): UseCase<GetMovieListInteractor, MovieListResponseData> {
 
     override fun execute(interactor: GetMovieListInteractor): Flowable<MovieListResponseData> {
-        return repository.getAll().observeOn(schedulers.uiScheduler)
+        return repository.getAll().observeOn(schedulers.ui)
     }
 }

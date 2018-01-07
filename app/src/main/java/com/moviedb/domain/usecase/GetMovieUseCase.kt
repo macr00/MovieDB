@@ -13,7 +13,7 @@ class GetMovieUseCase(
 
     override fun execute(interactor: GetMovieInteractor): Flowable<MovieDetailData> {
         return repository.getMovie(interactor.id)
-                .observeOn(schedulers.uiScheduler)
+                .observeOn(schedulers.ui)
     }
 }
 

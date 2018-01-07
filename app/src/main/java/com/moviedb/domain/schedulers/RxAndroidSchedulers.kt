@@ -6,10 +6,10 @@ import io.reactivex.schedulers.Schedulers
 
 class RxAndroidSchedulers : RxSchedulers {
 
-    override val uiScheduler: Scheduler
+    override val ui: Scheduler
         get() = AndroidSchedulers.mainThread()
-    override val ioScheduler: Scheduler
+    override val io: Scheduler
         get() = Schedulers.io()
-    override val computationScheduler: Scheduler
+    override val computation: Scheduler
         get() = Schedulers.computation()
 }

@@ -4,9 +4,9 @@ import io.reactivex.Scheduler
 
 interface RxSchedulers {
 
-    val uiScheduler: Scheduler
+    val ui: Scheduler
 
-    val ioScheduler: Scheduler
+    val io: Scheduler
 
-    val computationScheduler: Scheduler
+    val computation: Scheduler
 }

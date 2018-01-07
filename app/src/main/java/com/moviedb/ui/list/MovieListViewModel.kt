@@ -34,7 +34,7 @@ class MovieListViewModel(
 
     fun searchMovies(query: Flowable<CharSequence>) {
         disposables.add(query
-                .debounce(500, TimeUnit.MILLISECONDS, schedulers.uiScheduler)
+                .debounce(500, TimeUnit.MILLISECONDS, schedulers.ui)
                 .filter { it.length > 1 }
                 .map { it.toString().trim { it <= ' ' } }
                 .switchMap {

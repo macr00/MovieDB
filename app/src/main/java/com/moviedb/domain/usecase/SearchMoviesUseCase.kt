@@ -13,6 +13,6 @@ class SearchMoviesUseCase(
 ): UseCase<SearchMoviesInteractor, MovieListResponseData> {
 
     override fun execute(interactor: SearchMoviesInteractor): Flowable<MovieListResponseData> {
-        return repository.search(interactor.query).observeOn(schedulers.uiScheduler)
+        return repository.search(interactor.query).observeOn(schedulers.ui)
     }
 }
