@@ -1,5 +1,6 @@
 package com.moviedb.ui.list
 
+import android.util.Log
 import com.moviedb.data.model.MovieListResponseData
 import com.moviedb.domain.GetMovieListInteractor
 import com.moviedb.domain.SearchMoviesInteractor
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 class MovieListViewModel(
         private val getAllUseCase: UseCase<GetMovieListInteractor, MovieListResponseData>,
-        private val searchUseCase:UseCase<SearchMoviesInteractor, MovieListResponseData>,
+        private val searchUseCase: UseCase<SearchMoviesInteractor, MovieListResponseData>,
         private val schedulers: RxSchedulers
 ) : BaseViewModel() {
 
@@ -27,8 +28,8 @@ class MovieListViewModel(
     private fun getAllMovies(interactor: GetMovieListInteractor) {
         disposables.add(getAllUseCase.execute(interactor)
                 .subscribe(
-                        {},
-                        {}
+                        { Log.d("List Result", it.toString()) },
+                        { Log.d("List Result", it.message) }
                 ))
     }
 

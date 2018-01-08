@@ -1,5 +1,6 @@
 package com.moviedb.ui.list
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.SearchView
@@ -21,6 +22,10 @@ class MovieListActivity : BaseFragmentActivity(), MenuItem.OnActionExpandListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        movieListViewModel = ViewModelProviders
+                .of(this, movieListViewModelFactory)
+                .get(MovieListViewModel::class.java)
+                .apply { getAllMovies() }
     }
 
     override fun getActivity(): BaseFragmentActivity = this
@@ -34,7 +39,7 @@ class MovieListActivity : BaseFragmentActivity(), MenuItem.OnActionExpandListene
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
         val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
-                .apply { setOnActionExpandListener(this@MovieListActivity) }
+        searchItem.setOnActionExpandListener(this@MovieListActivity)
         searchView = searchItem.actionView as SearchView
         movieListViewModel.searchMovies(RxSearchView
                 .queryTextChanges(searchView)
