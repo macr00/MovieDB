@@ -1,5 +1,6 @@
 package com.moviedb.ui.details
 
+import com.moviedb.data.model.MovieDetailData
 import com.moviedb.domain.GetMovieInteractor
 import com.moviedb.domain.usecase.GetMovieUseCase
 import com.moviedb.ui.base.BaseViewModel
@@ -7,7 +8,7 @@ import com.moviedb.ui.base.BaseViewModel
 
 class MovieDetailsViewModel(
         private val useCase: GetMovieUseCase
-): BaseViewModel(){
+): BaseViewModel<MovieDetailData>(){
 
     fun getMovie(id: Long) {
         disposables.add(useCase.execute(GetMovieInteractor(id))

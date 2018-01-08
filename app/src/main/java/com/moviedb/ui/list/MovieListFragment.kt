@@ -16,6 +16,8 @@ class MovieListFragment : BaseFragment() {
 
     @Inject
     lateinit var movieListViewModelFactory: MovieListViewModelFactory
+    lateinit var movieListViewModel: MovieListViewModel
+    lateinit var moviesAdapter: MovieListAdapter
 
     override val fragment: BaseFragment = this
 
@@ -27,7 +29,7 @@ class MovieListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ViewModelProviders
+        movieListViewModel = ViewModelProviders
                 .of(activity, movieListViewModelFactory)
                 .get(MovieListViewModel::class.java)
                 .apply { getAllMovies() }

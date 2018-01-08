@@ -15,7 +15,7 @@ class MovieListViewModel(
         private val getAllUseCase: UseCase<GetMovieListInteractor, MovieListResponseData>,
         private val searchUseCase: UseCase<SearchMoviesInteractor, MovieListResponseData>,
         private val schedulers: RxSchedulers
-) : BaseViewModel() {
+) : BaseViewModel<MovieListResponseData>() {
 
     fun getAllMovies() {
         getAllMovies(GetMovieListInteractor(null))
