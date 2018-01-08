@@ -35,9 +35,9 @@ class MovieListActivity : BaseFragmentActivity(), MenuItem.OnActionExpandListene
                 .of(this, movieListViewModelFactory)
                 .get(MovieListViewModel::class.java)
                 .apply {
-                    RxSearchView
+                    searchMovies(RxSearchView
                             .queryTextChanges(searchView)
-                            .toFlowable(BackpressureStrategy.LATEST)
+                            .toFlowable(BackpressureStrategy.LATEST))
                 }
 
         return true
