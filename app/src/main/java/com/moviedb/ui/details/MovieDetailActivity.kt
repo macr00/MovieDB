@@ -11,6 +11,8 @@ class MovieDetailActivity : BaseFragmentActivity() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun getActivity(): BaseFragmentActivity = this
+
     override fun getLayoutId(): Int = R.layout.activity_movie_detail
 
     override fun getContainerId(): Int = R.id.movie_detail_container

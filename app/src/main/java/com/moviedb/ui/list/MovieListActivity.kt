@@ -9,8 +9,12 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.moviedb.R
 import com.moviedb.ui.base.BaseFragmentActivity
 import io.reactivex.BackpressureStrategy
+import javax.inject.Inject
 
 class MovieListActivity : BaseFragmentActivity(), MenuItem.OnActionExpandListener {
+
+    @Inject
+    lateinit var movieListViewModelFactory: MovieListViewModelFactory
 
     lateinit var movieListViewModel: MovieListViewModel
     lateinit var searchView: SearchView
@@ -19,7 +23,8 @@ class MovieListActivity : BaseFragmentActivity(), MenuItem.OnActionExpandListene
         super.onCreate(savedInstanceState)
     }
 
-    // TODO maybe switch to val properties
+    override fun getActivity(): BaseFragmentActivity = this
+
     override fun getLayoutId(): Int = R.layout.activity_movie_list
 
     override fun getContainerId(): Int = R.id.movie_list_container
@@ -40,10 +45,12 @@ class MovieListActivity : BaseFragmentActivity(), MenuItem.OnActionExpandListene
     }
 
     override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return true
     }
 
     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return true
     }
 }

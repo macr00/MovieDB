@@ -5,8 +5,10 @@ import com.moviedb.domain.GetMovieInteractor
 import com.moviedb.domain.MovieRepository
 import com.moviedb.domain.schedulers.RxSchedulers
 import io.reactivex.Flowable
+import javax.inject.Inject
 
-class GetMovieUseCase(
+class GetMovieUseCase
+@Inject constructor(
         private val repository: MovieRepository,
         private val schedulers: RxSchedulers
 ): UseCase<GetMovieInteractor, MovieDetailData> {

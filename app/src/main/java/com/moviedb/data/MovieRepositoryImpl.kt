@@ -5,11 +5,13 @@ import com.moviedb.data.model.MovieListResponseData
 import com.moviedb.domain.MovieRepository
 import com.moviedb.domain.schedulers.RxSchedulers
 import io.reactivex.Flowable
+import javax.inject.Inject
 
-class MovieRepositoryImpl(
+class MovieRepositoryImpl
+@Inject constructor(
         private val api: MovieDatabaseApi,
         private val schedulers: RxSchedulers
-): MovieRepository {
+) : MovieRepository {
 
     override fun getAll(): Flowable<MovieListResponseData> {
         return api.discover()

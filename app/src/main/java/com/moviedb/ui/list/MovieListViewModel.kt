@@ -1,18 +1,18 @@
 package com.moviedb.ui.list
 
+import com.moviedb.data.model.MovieListResponseData
 import com.moviedb.domain.GetMovieListInteractor
 import com.moviedb.domain.SearchMoviesInteractor
 import com.moviedb.domain.schedulers.RxSchedulers
-import com.moviedb.domain.usecase.GetMovieListUseCase
-import com.moviedb.domain.usecase.SearchMoviesUseCase
+import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModel
 import io.reactivex.Flowable
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class MovieListViewModel(
-        private val getAllUseCase: GetMovieListUseCase,
-        private val searchUseCase: SearchMoviesUseCase,
+        private val getAllUseCase: UseCase<GetMovieListInteractor, MovieListResponseData>,
+        private val searchUseCase:UseCase<SearchMoviesInteractor, MovieListResponseData>,
         private val schedulers: RxSchedulers
 ) : BaseViewModel() {
 
