@@ -1,7 +1,6 @@
 package com.moviedb.ui.list
 
 import android.arch.lifecycle.ViewModelProviders
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.SearchView
 import android.view.Menu
@@ -16,17 +15,8 @@ class MovieListActivity : BaseFragmentActivity(), MenuItem.OnActionExpandListene
 
     @Inject
     lateinit var movieListViewModelFactory: MovieListViewModelFactory
-
     lateinit var movieListViewModel: MovieListViewModel
     lateinit var searchView: SearchView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        movieListViewModel = ViewModelProviders
-                .of(this, movieListViewModelFactory)
-                .get(MovieListViewModel::class.java)
-                .apply { getAllMovies() }
-    }
 
     override fun getActivity(): BaseFragmentActivity = this
 
@@ -41,21 +31,25 @@ class MovieListActivity : BaseFragmentActivity(), MenuItem.OnActionExpandListene
         val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
         searchItem.setOnActionExpandListener(this@MovieListActivity)
         searchView = searchItem.actionView as SearchView
-        movieListViewModel.searchMovies(RxSearchView
-                .queryTextChanges(searchView)
-                .toFlowable(BackpressureStrategy.LATEST)
-        )
+        movieListViewModel = ViewModelProviders
+                .of(this, movieListViewModelFactory)
+                .get(MovieListViewModel::class.java)
+                .apply {
+                    RxSearchView
+                            .queryTextChanges(searchView)
+                            .toFlowable(BackpressureStrategy.LATEST)
+                }
 
         return true
     }
 
     override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // TODO check this
         return true
     }
 
     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO implement cancel search
         return true
     }
 }

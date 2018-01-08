@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(
         AppModule::class,
         DataModule::class,
-        AndroidBindingModule::class,
+        ActivitiesModule::class,
         AndroidSupportInjectionModule::class
 ))
 interface AppComponent: AndroidInjector<MovieDbApp> {
