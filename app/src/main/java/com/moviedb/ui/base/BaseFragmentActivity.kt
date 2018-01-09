@@ -28,11 +28,12 @@ abstract class BaseFragmentActivity : AppCompatActivity(), HasSupportFragmentInj
 
     abstract fun getContainerId(): Int
 
-    abstract fun getContentFragment(): Fragment
+    abstract fun getContentFragment(): BaseFragment
 
-    private fun addFragment(containerId: Int, fragment: Fragment) {
+    protected fun addFragment(containerId: Int, fragment: BaseFragment) {
         supportFragmentManager.beginTransaction().apply {
-            add(containerId, fragment)
+            add(containerId, fragment, fragment.tag)
+            addToBackStack(fragment.tag)
         }.commit()
     }
 

@@ -18,5 +18,9 @@ abstract class BaseViewModel : ViewModel() {
         super.onCleared()
         disposables.clear()
     }
+
+    protected fun onError(throwable: Throwable) {
+
+    }
 }
 

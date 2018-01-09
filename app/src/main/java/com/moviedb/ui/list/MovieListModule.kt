@@ -9,6 +9,7 @@ import com.moviedb.domain.schedulers.RxSchedulers
 import com.moviedb.domain.usecase.GetMovieListUseCase
 import com.moviedb.domain.usecase.SearchMoviesUseCase
 import com.moviedb.domain.usecase.UseCase
+import com.moviedb.ui.common.MovieResultsPaginator
 import dagger.Module
 import dagger.Provides
 
@@ -21,17 +22,11 @@ class MovieListModule {
     }
 
     @Provides
-    fun provideSearchUseCase(useCase: SearchMoviesUseCase): UseCase<SearchMoviesInteractor, MovieListResponseData> {
-        return useCase
-    }
-
-    @Provides
     fun provideViewModelFactory(
             getAllUseCase: UseCase<GetMovieListInteractor, MovieListResponseData>,
-            searchUseCase: UseCase<SearchMoviesInteractor, MovieListResponseData>,
-            schedulers: RxSchedulers
+            paginator: MovieResultsPaginator
     ): MovieListViewModelFactory {
-        return MovieListViewModelFactory(getAllUseCase, searchUseCase, schedulers)
+        return MovieListViewModelFactory(getAllUseCase, paginator)
     }
 
 }

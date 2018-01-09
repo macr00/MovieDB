@@ -2,16 +2,18 @@ package com.moviedb.ui.details
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.moviedb.R
+import com.moviedb.ui.base.BaseFragment
+import com.moviedb.ui.common.Response
 
 
-class MovieDetailsFragment : Fragment() {
+class MovieDetailsFragment : BaseFragment() {
 
+    override val fragment: BaseFragment = this
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -19,4 +21,7 @@ class MovieDetailsFragment : Fragment() {
         return inflater!!.inflate(R.layout.fragment_movie_details, container, false)
     }
 
-}// Required empty public constructor
+    override fun onLiveDataUpdated(response: Response?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}

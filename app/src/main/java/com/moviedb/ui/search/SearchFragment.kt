@@ -1,4 +1,4 @@
-package com.moviedb.ui.list
+package com.moviedb.ui.search
 
 
 import android.arch.lifecycle.Observer
@@ -17,40 +17,39 @@ import com.moviedb.ui.common.MovieListResponse
 import com.moviedb.ui.common.RecyclerViewDelegate
 import com.moviedb.ui.common.Response
 import com.moviedb.ui.details.MovieDetailActivity
+import com.moviedb.ui.list.MovieListAdapter
 import kotlinx.android.synthetic.main.fragment_movie_list.*
+import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
 
-
-class MovieListFragment : BaseFragment() {
+class SearchFragment : BaseFragment() {
 
     @Inject
-    lateinit var movieListViewModelFactory: MovieListViewModelFactory
-    lateinit private var movieListViewModel: MovieListViewModel
+    lateinit var searchViewModelFactory: SearchViewModelFactory
+    lateinit private var searchViewModel: SearchViewModel
     lateinit private var recyclerViewDelegate: RecyclerViewDelegate<MovieListItemData>
 
     override val fragment: BaseFragment = this
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_movie_list, container, false)
+        return inflater!!.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerViewDelegate = RecyclerViewDelegate(
-                recyclerView = movies_rv,
+                recyclerView = search_results_rv,
                 lm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false),
                 listAdapter = MovieListAdapter(mutableListOf(), {
                     startActivity(MovieDetailActivity.createIntent(activity, it.id, it.title))
                 })
         )
-        movieListViewModel = ViewModelProviders
-                .of(activity, movieListViewModelFactory)
-                .get(MovieListViewModel::class.java)
+        searchViewModel = ViewModelProviders
+                .of(activity, searchViewModelFactory)
+                .get(SearchViewModel::class.java)
                 .apply {
-                    getAllMovies()
-                    response.observe(this@MovieListFragment, Observer { onLiveDataUpdated(it) })
+                    response.observe(this@SearchFragment, Observer { onLiveDataUpdated(it) })
                 }
     }
 
@@ -73,4 +72,7 @@ class MovieListFragment : BaseFragment() {
         }
     }
 
+    companion object {
+        const val TAG = "SearchFragment"
+    }
 }

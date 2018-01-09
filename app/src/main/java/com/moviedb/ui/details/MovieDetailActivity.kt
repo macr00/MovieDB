@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.moviedb.R
+import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.base.BaseFragmentActivity
 
 class MovieDetailActivity : BaseFragmentActivity() {
@@ -34,5 +35,5 @@ class MovieDetailActivity : BaseFragmentActivity() {
 
     override fun getContainerId(): Int = R.id.movie_detail_container
 
-    override fun getContentFragment(): Fragment = MovieDetailsFragment()
+    override fun getContentFragment(): BaseFragment = MovieDetailsFragment()
 }
