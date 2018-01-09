@@ -3,6 +3,7 @@ package com.moviedb.app
 import com.moviedb.data.DataModule
 import com.moviedb.domain.MovieRepository
 import com.moviedb.domain.schedulers.RxSchedulers
+import com.moviedb.ui.ActivitiesModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector

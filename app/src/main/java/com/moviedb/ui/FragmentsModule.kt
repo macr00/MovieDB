@@ -1,4 +1,4 @@
-package com.moviedb.app
+package com.moviedb.ui
 
 import com.moviedb.ui.list.MovieListFragment
 import com.moviedb.ui.list.MovieListModule
