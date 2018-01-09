@@ -8,7 +8,7 @@ import com.moviedb.ui.base.BaseViewModel
 
 class MovieDetailsViewModel(
         private val useCase: GetMovieUseCase
-): BaseViewModel<MovieDetailData>(){
+): BaseViewModel(){
 
     fun getMovie(id: Long) {
         disposables.add(useCase.execute(GetMovieInteractor(id))

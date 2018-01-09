@@ -13,7 +13,7 @@ import javax.inject.Inject
 class MovieListAdapter
 @Inject constructor() : RecyclerView.Adapter<MovieListAdapter.ViewHolder>() {
 
-    private val items = arrayListOf<MovieListItemData>()
+    private var items = mutableListOf<MovieListItemData>()
 
     override fun onBindViewHolder(holder: MovieListAdapter.ViewHolder?, position: Int) {
         holder?.bind(items[position])
@@ -29,6 +29,17 @@ class MovieListAdapter
 
     override fun getItemId(position: Int): Long {
         return items[position].id
+    }
+
+    fun addItems(list: List<MovieListItemData>) {
+        val start = items.size
+        items.addAll(list)
+        notifyItemRangeInserted(start, list.size)
+    }
+
+    fun newList(list: List<MovieListItemData>) {
+        items = list.toMutableList()
+        notifyDataSetChanged()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
