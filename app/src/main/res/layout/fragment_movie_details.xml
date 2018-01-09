@@ -4,4 +4,11 @@
              android:layout_height="match_parent"
              tools:context="com.moviedb.ui.details.MovieDetailsFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:text="Details Screen"/>
+
 </FrameLayout>

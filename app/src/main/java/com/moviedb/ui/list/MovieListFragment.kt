@@ -14,6 +14,7 @@ import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.common.ErrorResponse
 import com.moviedb.ui.common.MovieListResponse
 import com.moviedb.ui.common.Response
+import com.moviedb.ui.details.MovieDetailActivity
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 import javax.inject.Inject
 
@@ -22,9 +23,9 @@ class MovieListFragment : BaseFragment() {
 
     @Inject
     lateinit var movieListViewModelFactory: MovieListViewModelFactory
-    lateinit var movieListViewModel: MovieListViewModel
-    lateinit var moviesAdapter: MovieListAdapter
-    lateinit var llm: LinearLayoutManager
+    lateinit private var movieListViewModel: MovieListViewModel
+    lateinit private var moviesAdapter: MovieListAdapter
+    lateinit private var llm: LinearLayoutManager
 
     override val fragment: BaseFragment = this
 
@@ -37,7 +38,9 @@ class MovieListFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         llm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        moviesAdapter = MovieListAdapter()
+        moviesAdapter = MovieListAdapter({
+            startActivity(MovieDetailActivity.createIntent(activity, it.id, it.title))
+        })
         movies_rv.apply {
             layoutManager = llm
             adapter = moviesAdapter
@@ -53,7 +56,7 @@ class MovieListFragment : BaseFragment() {
         response?.let {
             when(it) {
                 is ErrorResponse -> { }
-                is MovieListResponse -> { updateList(response as MovieListResponse) }
+                is MovieListResponse -> { updateList(it) }
             }
         }
     }
@@ -63,4 +66,5 @@ class MovieListFragment : BaseFragment() {
             if (it.page == 1) moviesAdapter.newList(it.results) else moviesAdapter.addItems(it.results)
         }
     }
+
 }
