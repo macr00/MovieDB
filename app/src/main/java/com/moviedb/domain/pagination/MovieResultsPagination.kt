@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 abstract class MovieResultsPagination : Pagination<MovieListResponseData> {
 
-    private var isComplete: Boolean = false
-    private var nextPage: Int = 1
+    protected var isComplete: Boolean = false
+    protected var nextPage: Int = 1
 
     override fun hasNext(): Boolean {
         return !isComplete

@@ -4,7 +4,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 
 class InfiniteScrollListener(
-        private val listener: Unit
+        private val listener: () -> Unit
 ): RecyclerView.OnScrollListener() {
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -13,7 +13,7 @@ class InfiniteScrollListener(
         val last = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
         if (totalCount <= (last + THRESHOLD)) {
-            listener
+            listener.invoke()
         }
     }
 

@@ -12,10 +12,7 @@ import android.view.ViewGroup
 import com.moviedb.R
 import com.moviedb.data.model.MovieListItemData
 import com.moviedb.ui.base.BaseFragment
-import com.moviedb.ui.common.ErrorResponse
-import com.moviedb.ui.common.MovieListResponse
-import com.moviedb.ui.common.RecyclerViewDelegate
-import com.moviedb.ui.common.Response
+import com.moviedb.ui.common.*
 import com.moviedb.ui.details.MovieDetailActivity
 import com.moviedb.ui.list.MovieListAdapter
 import kotlinx.android.synthetic.main.fragment_movie_list.*
@@ -51,6 +48,7 @@ class SearchFragment : BaseFragment() {
                 .apply {
                     response.observe(this@SearchFragment, Observer { onLiveDataUpdated(it) })
                 }
+        search_results_rv.addOnScrollListener(InfiniteScrollListener( { searchViewModel.loadNextPage() }))
     }
 
     override fun onLiveDataUpdated(response: Response?) {

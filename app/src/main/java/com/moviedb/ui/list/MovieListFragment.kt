@@ -50,7 +50,7 @@ class MovieListFragment : BaseFragment() {
                     response.observe(this@MovieListFragment, Observer { onLiveDataUpdated(it) })
                 }
 
-        movies_rv.addOnScrollListener(InfiniteScrollListener(movieListViewModel.loadNextPage()))
+        movies_rv.addOnScrollListener(InfiniteScrollListener({ movieListViewModel.loadNextPage() }))
     }
 
     override fun onLiveDataUpdated(response: Response?) {

@@ -8,7 +8,10 @@ import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModel
 import com.moviedb.ui.common.NextPageScrollListener
 import com.moviedb.ui.common.MovieListResponse
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Observable
+import org.reactivestreams.Publisher
 import java.util.concurrent.TimeUnit
 
 
@@ -22,18 +25,22 @@ class SearchViewModel(
 
     override fun loadNextPage() {
         if (!isLoading) {
-            disposables.add(searchMovieDisposable(interactor)
-                    .subscribe({ onSuccess(it) }, { }))
+            disposables.add(searchMovieDisposable(interactor).subscribe())
         }
     }
 
-    fun searchMovies(query: Flowable<CharSequence>) {
-        disposables.add(query
-                .debounce(500, TimeUnit.MILLISECONDS, schedulers.ui)
+    fun searchMovies(queryChars: Flowable<CharSequence>) {
+        disposables.add(queryChars
+                .debounce(500, TimeUnit.MILLISECONDS, schedulers.computation)
                 .filter { it.length > 1 }
-                .map { it.toString().trim { it <= ' ' } }
-                .switchMap { searchMovieDisposable(interactor) }
-                .subscribe({ onSuccess(it) }, { }))
+                .map { chars ->
+                    interactor.apply {
+                        reset()
+                        query = chars.toString().trim { it <= ' ' }
+                    }
+                }
+                .switchMap { searchMovieDisposable(it) }
+                .subscribe())
     }
 
     private fun searchMovieDisposable(interactor: SearchMoviesInteractor): Flowable<MovieListResponseData> {
@@ -41,6 +48,7 @@ class SearchViewModel(
                 .doOnSubscribe { onLoading(true) }
                 .doOnTerminate { onLoading(false) }
                 .doOnError { onError(it) }
+                .doOnNext { onSuccess(it) }
                 .onErrorResumeNext(Flowable.empty())
     }
 
