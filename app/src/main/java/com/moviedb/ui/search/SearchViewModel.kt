@@ -25,12 +25,14 @@ class SearchViewModel(
                 .filter { it.length > 1 }
                 .map { it.toString().trim { it <= ' ' } }
                 .switchMap { searchMovieDisposable(SearchMoviesInteractor(1, it)) }
-                .subscribe({ onSuccess(it)  }, { Log.d("Search Error", it.message) }))
+                .subscribe({ onSuccess(it)  }, {  }))
     }
 
     private fun searchMovieDisposable(interactor: SearchMoviesInteractor): Publisher<MovieListResponseData> {
         return searchUseCase.execute(interactor)
-                .doOnSubscribe { /* TODO */ }
+                .doOnSubscribe { displayLoading(true) }
+                .doOnTerminate { displayLoading(false) }
+                .doOnError { onError(it) }
                 .onErrorResumeNext(Flowable.empty())
     }
 

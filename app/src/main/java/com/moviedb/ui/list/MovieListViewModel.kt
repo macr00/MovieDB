@@ -31,7 +31,8 @@ class MovieListViewModel(
 
     private fun getAllDisposable(interactor: GetMovieListInteractor): Disposable {
         return getAllUseCase.execute(interactor)
-                .doOnSubscribe { onLoading() }
+                .doOnSubscribe { displayLoading(true) }
+                .doOnTerminate { displayLoading(false) }
                 .subscribe({ onSuccess(it) }, { onError(it) })
     }
 
@@ -40,10 +41,6 @@ class MovieListViewModel(
             return if (it.page != it.totalPages) it.page + 1 else null
         }
         return 1
-    }
-
-    private fun onLoading() {
-
     }
 
     private fun onSuccess(data: MovieListResponseData) {
