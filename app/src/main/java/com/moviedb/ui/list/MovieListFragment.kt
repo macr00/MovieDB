@@ -12,10 +12,7 @@ import android.view.ViewGroup
 import com.moviedb.R
 import com.moviedb.data.model.MovieListItemData
 import com.moviedb.ui.base.BaseFragment
-import com.moviedb.ui.common.ErrorResponse
-import com.moviedb.ui.common.MovieListResponse
-import com.moviedb.ui.common.RecyclerViewDelegate
-import com.moviedb.ui.common.Response
+import com.moviedb.ui.common.*
 import com.moviedb.ui.details.MovieDetailActivity
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 import javax.inject.Inject
@@ -40,7 +37,7 @@ class MovieListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         recyclerViewDelegate = RecyclerViewDelegate(
                 recyclerView = movies_rv,
-                lm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false),
+                llm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false),
                 listAdapter = MovieListAdapter(mutableListOf(), {
                     startActivity(MovieDetailActivity.createIntent(activity, it.id, it.title))
                 })
@@ -52,6 +49,8 @@ class MovieListFragment : BaseFragment() {
                     getAllMovies()
                     response.observe(this@MovieListFragment, Observer { onLiveDataUpdated(it) })
                 }
+
+        movies_rv.addOnScrollListener(InfiniteScrollListener(movieListViewModel.loadNextPage()))
     }
 
     override fun onLiveDataUpdated(response: Response?) {

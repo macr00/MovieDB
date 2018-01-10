@@ -1,16 +1,28 @@
 package com.moviedb.ui.search
 
 import com.moviedb.data.model.MovieListResponseData
-import com.moviedb.domain.SearchMoviesInteractor
+import com.moviedb.domain.interactors.SearchMoviesInteractor
 import com.moviedb.domain.schedulers.RxSchedulers
 import com.moviedb.domain.usecase.SearchMoviesUseCase
 import com.moviedb.domain.usecase.UseCase
-import com.moviedb.ui.common.MovieResultsPaginator
+import com.moviedb.domain.pagination.MovieResultsPagination
+import com.moviedb.domain.pagination.SearchPagination
+import com.moviedb.domain.pagination.SearchPaginationImpl
 import dagger.Module
 import dagger.Provides
 
 @Module
 class SearchModule {
+
+    @Provides
+    fun provideSearchPagination(): SearchPagination {
+        return SearchPaginationImpl()
+    }
+
+    @Provides
+    fun provideSearchMoviesInteractor(pagination: SearchPagination): SearchMoviesInteractor {
+        return SearchMoviesInteractor(pagination)
+    }
 
     @Provides
     fun provideSearchUseCase(useCase: SearchMoviesUseCase): UseCase<SearchMoviesInteractor, MovieListResponseData> {
@@ -20,10 +32,10 @@ class SearchModule {
     @Provides
     fun provideViewModelFactory(
             searchUseCase: UseCase<SearchMoviesInteractor, MovieListResponseData>,
-            paginator: MovieResultsPaginator,
+            interactor: SearchMoviesInteractor,
             schedulers: RxSchedulers
     ): SearchViewModelFactory {
-        return SearchViewModelFactory(searchUseCase, paginator, schedulers)
+        return SearchViewModelFactory(searchUseCase, interactor , schedulers)
     }
 
 }

@@ -5,9 +5,9 @@ import android.view.View
 
 interface ListAdapter<T> {
 
-    fun freshData(items: Collection<T>)
+    fun freshData(freshDataset: Collection<T>)
 
-    fun addItems(items: Collection<T>)
+    fun addItems(newItems: Collection<T>)
 }
 
 abstract class BaseListAdapter<T, VH : BaseListAdapter.ViewHolder<T>>(
@@ -17,15 +17,15 @@ abstract class BaseListAdapter<T, VH : BaseListAdapter.ViewHolder<T>>(
 
     override fun getItemCount(): Int = items.size
 
-    override fun freshData(items: Collection<T>) {
-        this.items = items.toMutableList()
+    override fun freshData(freshDataset: Collection<T>) {
+        this.items = freshDataset.toMutableList()
         notifyDataSetChanged()
     }
 
-    override fun addItems(items: Collection<T>) {
+    override fun addItems(newItems: Collection<T>) {
         val start = items.size
-        this.items.addAll(items)
-        notifyItemRangeInserted(start, items.size)
+        this.items.addAll(newItems)
+        notifyItemRangeInserted(start, newItems.size)
     }
 
     abstract class ViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {

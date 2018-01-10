@@ -20,7 +20,7 @@ abstract class BaseViewModel : ViewModel() {
         disposables.clear()
     }
 
-    protected fun displayLoading(isLoading: Boolean) {
+    open fun onLoading(isLoading: Boolean) {
 
     }
 

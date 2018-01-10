@@ -40,7 +40,7 @@ class SearchFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         recyclerViewDelegate = RecyclerViewDelegate(
                 recyclerView = search_results_rv,
-                lm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false),
+                llm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false),
                 listAdapter = MovieListAdapter(mutableListOf(), {
                     startActivity(MovieDetailActivity.createIntent(activity, it.id, it.title))
                 })

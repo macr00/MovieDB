@@ -1,7 +1,6 @@
 package com.moviedb.ui.details
 
-import com.moviedb.data.model.MovieDetailData
-import com.moviedb.domain.GetMovieInteractor
+import com.moviedb.domain.interactors.GetMovieInteractor
 import com.moviedb.domain.usecase.GetMovieUseCase
 import com.moviedb.ui.base.BaseViewModel
 

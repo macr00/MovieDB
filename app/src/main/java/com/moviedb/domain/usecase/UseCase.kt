@@ -1,6 +1,6 @@
 package com.moviedb.domain.usecase
 
-import com.moviedb.domain.Interactor
+import com.moviedb.domain.interactors.Interactor
 import io.reactivex.Flowable
 
 interface UseCase<I: Interactor, T> {

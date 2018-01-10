@@ -2,14 +2,11 @@ package com.moviedb.ui.list
 
 
 import com.moviedb.data.model.MovieListResponseData
-import com.moviedb.domain.GetMovieListInteractor
-import com.moviedb.domain.MovieRepository
-import com.moviedb.domain.SearchMoviesInteractor
-import com.moviedb.domain.schedulers.RxSchedulers
+import com.moviedb.domain.interactors.GetAllMoviesInteractor
+import com.moviedb.domain.pagination.GetAllMoviesPagination
+import com.moviedb.domain.pagination.GetAllMoviesPaginationImpl
 import com.moviedb.domain.usecase.GetMovieListUseCase
-import com.moviedb.domain.usecase.SearchMoviesUseCase
 import com.moviedb.domain.usecase.UseCase
-import com.moviedb.ui.common.MovieResultsPaginator
 import dagger.Module
 import dagger.Provides
 
@@ -17,16 +14,26 @@ import dagger.Provides
 class MovieListModule {
 
     @Provides
-    fun provideGetAllUseCase(useCase: GetMovieListUseCase): UseCase<GetMovieListInteractor, MovieListResponseData> {
+    fun provideGetAllMoviesPagination(): GetAllMoviesPagination {
+        return GetAllMoviesPaginationImpl()
+    }
+
+    @Provides
+    fun provideGetAllMoviesInteractor(pagination: GetAllMoviesPagination): GetAllMoviesInteractor {
+        return GetAllMoviesInteractor(pagination)
+    }
+
+    @Provides
+    fun provideGetAllUseCase(useCase: GetMovieListUseCase): UseCase<GetAllMoviesInteractor, MovieListResponseData> {
         return useCase
     }
 
     @Provides
     fun provideViewModelFactory(
-            getAllUseCase: UseCase<GetMovieListInteractor, MovieListResponseData>,
-            paginator: MovieResultsPaginator
+            getAllUseCase: UseCase<GetAllMoviesInteractor, MovieListResponseData>,
+            interactor: GetAllMoviesInteractor
     ): MovieListViewModelFactory {
-        return MovieListViewModelFactory(getAllUseCase, paginator)
+        return MovieListViewModelFactory(getAllUseCase, interactor)
     }
 
 }

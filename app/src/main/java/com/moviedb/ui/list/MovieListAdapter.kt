@@ -13,6 +13,10 @@ class MovieListAdapter(
         listener: (MovieListItemData) -> Unit
 ) : BaseListAdapter<MovieListItemData, MovieListAdapter.ViewHolder>(items,listener) {
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onBindViewHolder(holder: MovieListAdapter.ViewHolder?, position: Int) {
         holder?.bind(items[position], listener)
     }
