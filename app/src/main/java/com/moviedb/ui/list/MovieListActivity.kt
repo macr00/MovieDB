@@ -41,8 +41,8 @@ class MovieListActivity : BaseFragmentActivity(),
     lateinit private var searchViewModel: SearchViewModel
     lateinit private var searchView: SearchView
 
-    lateinit var yearSpinner: Spinner
-    val years = mutableListOf<String>()
+    lateinit private var yearSpinner: Spinner
+    private val years = mutableListOf<String>()
 
     override fun getActivity(): BaseFragmentActivity = this
 
@@ -54,11 +54,14 @@ class MovieListActivity : BaseFragmentActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val year = savedInstanceState?.getInt(YEAR, 0) ?: 0
-        setUpYearSpinner(year)
+        val position = savedInstanceState?.getInt(YEAR, 0) ?: 0
+        setUpYearSpinner(position)
         movieListViewModel = ViewModelProviders
                 .of(this, movieListViewModelFactory)
                 .get(MovieListViewModel::class.java)
+                .apply {
+                    getAllMovies(getSelectedYear())
+                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -81,11 +84,13 @@ class MovieListActivity : BaseFragmentActivity(),
     }
 
     override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+        searchViewModel.setYear(getSelectedYear())
         return true
     }
 
     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
         supportFragmentManager.popBackStack()
+        movieListViewModel.getAllMovies(getSelectedYear())
         return true
     }
 
@@ -135,21 +140,14 @@ class MovieListActivity : BaseFragmentActivity(),
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-        val year = convertYearToInt(years[position])
         if (searchDisplayed()) {
-            searchViewModel.searchMovies(year)
+            searchViewModel.searchMovies(years[position].toIntOrNull())
         } else {
-            movieListViewModel.getAllMovies(year)
+            movieListViewModel.getAllMovies(years[position].toIntOrNull())
         }
     }
 
-    private fun convertYearToInt(year: String): Int? {
-        return try {
-            year.toInt()
-        } catch (e: NumberFormatException) {
-            // All years is selected
-            null
-        }
+    private fun getSelectedYear(): Int? {
+        return (yearSpinner.selectedItem as String).toIntOrNull()
     }
-
 }

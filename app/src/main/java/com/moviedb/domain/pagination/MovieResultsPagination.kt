@@ -27,7 +27,7 @@ open class MovieResultsPagination : Pagination<MovieListResponseData> {
         }
     }
 
-    override fun reset() {
+    override fun resetPagination() {
         nextPage = 1
         isComplete = false
     }

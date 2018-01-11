@@ -8,10 +8,7 @@ import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModel
 import com.moviedb.ui.common.NextPageScrollListener
 import com.moviedb.ui.common.MovieListResponse
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Observable
-import org.reactivestreams.Publisher
 import java.util.concurrent.TimeUnit
 
 
@@ -29,11 +26,15 @@ class SearchViewModel(
         }
     }
 
+    fun setYear(year: Int?) {
+        interactor.year = year
+    }
+
     fun searchMovies(year: Int?) {
         if (!isLoading) {
             disposables.add(searchMovieDisposable(interactor
                     .apply {
-                        reset()
+                        resetPagination()
                         this.year = year
                     }
             ).subscribe())
@@ -46,8 +47,8 @@ class SearchViewModel(
                 .filter { it.length > 1 }
                 .map { chars ->
                     interactor.apply {
-                        reset()
-                        query = chars.toString().trim { it <= ' ' }
+                        resetPagination()
+                        this.query = chars.toString().trim { it <= ' ' }
                     }
                 }
                 .switchMap { searchMovieDisposable(it) }

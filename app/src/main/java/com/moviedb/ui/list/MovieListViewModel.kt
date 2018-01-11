@@ -22,14 +22,10 @@ class MovieListViewModel(
         }
     }
 
-    fun getAllMovies() {
-        disposables.add(getAllDisposable(interactor))
-    }
-
     fun getAllMovies(year: Int?) {
         disposables.add(getAllDisposable(interactor
                 .apply {
-                    reset()
+                    resetPagination()
                     this.year = year
                 }
         ))

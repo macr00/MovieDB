@@ -46,8 +46,9 @@ class MovieListFragment : BaseFragment() {
                 .of(activity, movieListViewModelFactory)
                 .get(MovieListViewModel::class.java)
                 .apply {
-                    getAllMovies()
-                    response.observe(this@MovieListFragment, Observer { onLiveDataUpdated(it) })
+                    response.observe(this@MovieListFragment, Observer {
+                        onLiveDataUpdated(it)
+                    })
                 }
 
         movies_rv.addOnScrollListener(InfiniteScrollListener({ movieListViewModel.loadNextPage() }))
@@ -55,9 +56,12 @@ class MovieListFragment : BaseFragment() {
 
     override fun onLiveDataUpdated(response: Response?) {
         response?.let {
-            when(it) {
-                is ErrorResponse -> { }
-                is MovieListResponse -> { updateList(it) }
+            when (it) {
+                is ErrorResponse -> {
+                }
+                is MovieListResponse -> {
+                    updateList(it)
+                }
             }
         }
     }

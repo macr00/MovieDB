@@ -4,7 +4,7 @@ import com.moviedb.domain.interactors.Interactor
 
 interface Pagination<T> : Interactor, Iterator {
 
-    fun reset()
+    fun resetPagination()
 
     fun processResult(result: T)
 }
