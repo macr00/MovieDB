@@ -15,13 +15,15 @@ class GetMovieListUseCase
 ) : UseCase<GetAllMoviesInteractor, MovieListResponseData> {
 
     override fun execute(interactor: GetAllMoviesInteractor): Flowable<MovieListResponseData> {
-        if (interactor.hasNext()) {
-            return repository.getAll(interactor.nextPage())
-                    .doOnNext { interactor.processResult(it) }
-                    .observeOn(schedulers.ui)
-        }
+        interactor.let {
+            if (it.hasNext()) {
+                return repository.getAll(it.nextPage(), it.year)
+                        .doOnNext { interactor.processResult(it) }
+                        .observeOn(schedulers.ui)
+            }
 
-        return Flowable.empty()
+            return Flowable.empty()
+        }
     }
 }
 

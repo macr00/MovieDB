@@ -3,8 +3,8 @@ package com.moviedb.ui.list
 
 import com.moviedb.data.model.MovieListResponseData
 import com.moviedb.domain.interactors.GetAllMoviesInteractor
-import com.moviedb.domain.pagination.GetAllMoviesPagination
-import com.moviedb.domain.pagination.GetAllMoviesPaginationImpl
+import com.moviedb.domain.pagination.MovieResultsPagination
+import com.moviedb.domain.pagination.Pagination
 import com.moviedb.domain.usecase.GetMovieListUseCase
 import com.moviedb.domain.usecase.UseCase
 import dagger.Module
@@ -14,13 +14,13 @@ import dagger.Provides
 class MovieListModule {
 
     @Provides
-    fun provideGetAllMoviesPagination(): GetAllMoviesPagination {
-        return GetAllMoviesPaginationImpl()
+    fun provideGetAllMoviesPagination(): Pagination<MovieListResponseData> {
+        return MovieResultsPagination()
     }
 
     @Provides
-    fun provideGetAllMoviesInteractor(pagination: GetAllMoviesPagination): GetAllMoviesInteractor {
-        return GetAllMoviesInteractor(pagination)
+    fun provideGetAllMoviesInteractor(pagination: Pagination<MovieListResponseData>): GetAllMoviesInteractor {
+        return GetAllMoviesInteractor(pagination, null)
     }
 
     @Provides

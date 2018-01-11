@@ -13,14 +13,14 @@ class MovieRepositoryImpl
         private val schedulers: RxSchedulers
 ) : MovieRepository {
 
-    override fun getAll(nextPage: Int): Flowable<MovieListResponseData> {
-        return api.discover(nextPage)
+    override fun getAll(nextPage: Int, year: Int?): Flowable<MovieListResponseData> {
+        return api.discover(nextPage, year)
                 .toFlowable()
                 .subscribeOn(schedulers.io)
     }
 
-    override fun search(nextPage: Int, title: String): Flowable<MovieListResponseData> {
-        return api.search(nextPage, title)
+    override fun search(nextPage: Int,  year: Int?, title: String): Flowable<MovieListResponseData> {
+        return api.search(nextPage, year, title)
                 .toFlowable()
                 .subscribeOn(schedulers.io)
     }

@@ -8,7 +8,6 @@ import com.moviedb.ui.base.BaseViewModel
 import com.moviedb.ui.common.NextPageScrollListener
 import com.moviedb.ui.common.MovieListResponse
 import io.reactivex.disposables.Disposable
-import java.util.Date
 
 class MovieListViewModel(
         private val getAllUseCase: UseCase<GetAllMoviesInteractor, MovieListResponseData>,
@@ -27,8 +26,13 @@ class MovieListViewModel(
         disposables.add(getAllDisposable(interactor))
     }
 
-    fun getAllMovies(date: Date) {
-        disposables.add(getAllDisposable(interactor))
+    fun getAllMovies(year: Int?) {
+        disposables.add(getAllDisposable(interactor
+                .apply {
+                    reset()
+                    this.year = year
+                }
+        ))
     }
 
     private fun getAllDisposable(interactor: GetAllMoviesInteractor): Disposable {

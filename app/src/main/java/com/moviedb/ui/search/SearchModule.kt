@@ -21,7 +21,7 @@ class SearchModule {
 
     @Provides
     fun provideSearchMoviesInteractor(pagination: SearchPagination): SearchMoviesInteractor {
-        return SearchMoviesInteractor(pagination)
+        return SearchMoviesInteractor(pagination, null)
     }
 
     @Provides

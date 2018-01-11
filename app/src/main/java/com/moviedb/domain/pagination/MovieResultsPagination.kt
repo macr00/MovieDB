@@ -3,10 +3,10 @@ package com.moviedb.domain.pagination
 import com.moviedb.data.model.MovieListResponseData
 import javax.inject.Inject
 
-abstract class MovieResultsPagination : Pagination<MovieListResponseData> {
+open class MovieResultsPagination : Pagination<MovieListResponseData> {
 
-    protected var isComplete: Boolean = false
-    protected var nextPage: Int = 1
+    private var isComplete: Boolean = false
+    private var nextPage: Int = 1
 
     override fun hasNext(): Boolean {
         return !isComplete
@@ -25,6 +25,11 @@ abstract class MovieResultsPagination : Pagination<MovieListResponseData> {
                 isComplete = true
             }
         }
+    }
+
+    override fun reset() {
+        nextPage = 1
+        isComplete = false
     }
 
 }

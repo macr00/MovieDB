@@ -29,6 +29,17 @@ class SearchViewModel(
         }
     }
 
+    fun searchMovies(year: Int?) {
+        if (!isLoading) {
+            disposables.add(searchMovieDisposable(interactor
+                    .apply {
+                        reset()
+                        this.year = year
+                    }
+            ).subscribe())
+        }
+    }
+
     fun searchMovies(queryChars: Flowable<CharSequence>) {
         disposables.add(queryChars
                 .debounce(500, TimeUnit.MILLISECONDS, schedulers.computation)

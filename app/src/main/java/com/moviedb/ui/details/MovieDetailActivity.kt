@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.MenuItem
 import com.moviedb.R
 import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.base.BaseFragmentActivity
@@ -36,4 +37,15 @@ class MovieDetailActivity : BaseFragmentActivity() {
     override fun getContainerId(): Int = R.id.movie_detail_container
 
     override fun getContentFragment(): BaseFragment = MovieDetailsFragment()
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 }
