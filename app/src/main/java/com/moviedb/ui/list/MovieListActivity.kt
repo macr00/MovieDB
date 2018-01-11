@@ -76,7 +76,10 @@ class MovieListActivity : BaseFragmentActivity(),
                 .of(this, searchViewModelFactory)
                 .get(SearchViewModel::class.java)
                 .apply {
-                    response.observe(this@MovieListActivity, Observer { onLiveDataUpdated(it) })
+                    response.observe(
+                            this@MovieListActivity,
+                            Observer { onLiveDataUpdated(it) }
+                    )
                 }
     }
 
