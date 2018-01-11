@@ -4,6 +4,7 @@ package com.moviedb.ui.list
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +55,17 @@ class MovieListFragment : BaseFragment() {
         movies_rv.addOnScrollListener(InfiniteScrollListener({ movieListViewModel.loadNextPage() }))
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(LIST_STATE, recyclerViewDelegate.llm.onSaveInstanceState())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        savedInstanceState?.getParcelable<Parcelable>(LIST_STATE)
+                .let { recyclerViewDelegate.llm.onRestoreInstanceState(it) }
+    }
+
     override fun onLiveDataUpdated(response: Response?) {
         response?.let {
             when (it) {
@@ -74,6 +86,10 @@ class MovieListFragment : BaseFragment() {
                 recyclerViewDelegate.addItems(it.results)
             }
         }
+    }
+
+    companion object {
+        const val LIST_STATE = "LIST_STATE"
     }
 
 }

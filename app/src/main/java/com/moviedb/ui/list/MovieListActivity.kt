@@ -28,12 +28,6 @@ import javax.inject.Inject
 class MovieListActivity : BaseFragmentActivity(),
         MenuItem.OnActionExpandListener, AdapterView.OnItemSelectedListener {
 
-    companion object {
-        const val YEAR = "YEAR_KEY"
-        const val QUERY = "QUERY_KEY"
-        const val SEARCHVIEW_OPEN = "SEARCHVIEW OPEN"
-    }
-
     @Inject
     lateinit var movieListViewModelFactory: MovieListViewModelFactory
     lateinit var movieListViewModel: MovieListViewModel
@@ -47,6 +41,7 @@ class MovieListActivity : BaseFragmentActivity(),
     lateinit private var yearSpinner: Spinner
     private var queryText: String = ""
     private var searchOpen: Boolean = false
+    private var savedSpinnerPosition: Int = 0
     private val years = mutableListOf<String>()
 
     override fun getActivity(): BaseFragmentActivity = this
@@ -61,10 +56,12 @@ class MovieListActivity : BaseFragmentActivity(),
         super.onCreate(savedInstanceState)
         initViewModels()
         queryText = savedInstanceState?.getString(QUERY, "") ?: ""
-        searchOpen = savedInstanceState?.getBoolean(SEARCHVIEW_OPEN, false) ?: false
-        val position = savedInstanceState?.getInt(YEAR, 0) ?: 0
-        setUpYearSpinner(position)
-        movieListViewModel.getAllMovies(getSelectedYear())
+        searchOpen = savedInstanceState?.getBoolean(SEARCH_OPEN, false) ?: false
+        savedSpinnerPosition = savedInstanceState?.getInt(YEAR, 0) ?: 0
+        setUpYearSpinner(savedSpinnerPosition)
+        if (savedInstanceState == null) {
+            movieListViewModel.getAllMovies(getSelectedYear())
+        }
     }
 
     private fun initViewModels() {
@@ -116,7 +113,7 @@ class MovieListActivity : BaseFragmentActivity(),
         super.onSaveInstanceState(outState)
         outState.putInt(YEAR, yearSpinner.selectedItemPosition)
         outState.putString(QUERY, searchView.query?.toString())
-        outState.putBoolean(SEARCHVIEW_OPEN, searchItem.isActionViewExpanded)
+        outState.putBoolean(SEARCH_OPEN, searchItem.isActionViewExpanded)
     }
 
     private fun onLiveDataUpdated(response: Response?) {
@@ -160,14 +157,22 @@ class MovieListActivity : BaseFragmentActivity(),
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-        if (searchDisplayed()) {
-            searchViewModel.searchMovies(years[position].toIntOrNull())
-        } else {
-            movieListViewModel.getAllMovies(years[position].toIntOrNull())
+        if (savedSpinnerPosition != position) {
+            if (searchDisplayed()) {
+                searchViewModel.searchMovies(years[position].toIntOrNull())
+            } else {
+                movieListViewModel.getAllMovies(years[position].toIntOrNull())
+            }
         }
     }
 
     private fun getSelectedYear(): Int? {
         return (yearSpinner.selectedItem as String).toIntOrNull()
+    }
+
+    companion object {
+        const val YEAR = "YEAR_KEY"
+        const val QUERY = "QUERY_KEY"
+        const val SEARCH_OPEN = "SEARCHVIEW OPEN"
     }
 }

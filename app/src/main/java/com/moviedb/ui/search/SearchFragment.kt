@@ -4,6 +4,7 @@ package com.moviedb.ui.search
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.common.*
 import com.moviedb.ui.details.MovieDetailsActivity
 import com.moviedb.ui.list.MovieListAdapter
+import com.moviedb.ui.list.MovieListFragment
 import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
 
@@ -50,6 +52,17 @@ class SearchFragment : BaseFragment() {
         search_results_rv.addOnScrollListener(InfiniteScrollListener( { searchViewModel.loadNextPage() }))
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(MovieListFragment.LIST_STATE, recyclerViewDelegate.llm.onSaveInstanceState())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        savedInstanceState?.getParcelable<Parcelable>(MovieListFragment.LIST_STATE)
+                .let { recyclerViewDelegate.llm.onRestoreInstanceState(it) }
+    }
+
     override fun onLiveDataUpdated(response: Response?) {
         response?.let {
             when(it) {
@@ -70,6 +83,6 @@ class SearchFragment : BaseFragment() {
     }
 
     companion object {
-        const val TAG = "SearchFragment"
+        const val LIST_STATE = "LIST_STATE"
     }
 }
