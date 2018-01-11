@@ -13,9 +13,8 @@ import com.moviedb.R
 import com.moviedb.data.model.MovieListItemData
 import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.common.*
-import com.moviedb.ui.details.MovieDetailActivity
+import com.moviedb.ui.details.MovieDetailsActivity
 import com.moviedb.ui.list.MovieListAdapter
-import kotlinx.android.synthetic.main.fragment_movie_list.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
 
@@ -39,7 +38,7 @@ class SearchFragment : BaseFragment() {
                 recyclerView = search_results_rv,
                 llm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false),
                 listAdapter = MovieListAdapter(mutableListOf(), {
-                    startActivity(MovieDetailActivity.createIntent(activity, it.id, it.title))
+                    startActivity(MovieDetailsActivity.createIntent(activity, it.id, it.title))
                 })
         )
         searchViewModel = ViewModelProviders

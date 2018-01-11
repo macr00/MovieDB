@@ -1,21 +1,26 @@
 package com.moviedb.ui.details
 
+
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.MenuItem
 import com.moviedb.R
 import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.base.BaseFragmentActivity
+import javax.inject.Inject
 
-class MovieDetailActivity : BaseFragmentActivity() {
+class MovieDetailsActivity : BaseFragmentActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: MovieDetailsViewModelFactory
 
     companion object {
         const val ID_KEY = "ID"
         const val TITLE_KEY = "TITLE"
         fun createIntent(context: Context, id: Long, title: String) =
-                Intent(context, MovieDetailActivity::class.java)
+                Intent(context, MovieDetailsActivity::class.java)
                         .apply {
                             putExtra(ID_KEY, id)
                             putExtra(TITLE_KEY, title)
@@ -28,6 +33,9 @@ class MovieDetailActivity : BaseFragmentActivity() {
             setDisplayHomeAsUpEnabled(true)
             title = intent.getStringExtra(TITLE_KEY)
         }
+        ViewModelProviders.of(this, viewModelFactory)
+                .get(MovieDetailsViewModel::class.java)
+                .getMovie(intent.getLongExtra(ID_KEY, -1))
     }
 
     override fun getActivity(): BaseFragmentActivity = this
@@ -48,4 +56,5 @@ class MovieDetailActivity : BaseFragmentActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
 }

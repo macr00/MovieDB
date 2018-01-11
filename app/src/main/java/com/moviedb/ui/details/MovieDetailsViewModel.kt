@@ -1,20 +1,24 @@
 package com.moviedb.ui.details
 
+import com.moviedb.data.model.MovieDetailData
 import com.moviedb.domain.interactors.GetMovieInteractor
-import com.moviedb.domain.usecase.GetMovieUseCase
+import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModel
+import com.moviedb.ui.common.ErrorResponse
+import com.moviedb.ui.common.MovieDetailsResponse
 
 
 class MovieDetailsViewModel(
-        private val useCase: GetMovieUseCase
+        private val useCase: UseCase<GetMovieInteractor, MovieDetailData>
 ): BaseViewModel(){
 
     fun getMovie(id: Long) {
         disposables.add(useCase.execute(GetMovieInteractor(id))
-                .doOnSubscribe { /* TODO loading */ }
+                .doOnSubscribe { onLoading(true) }
+                .doAfterTerminate { onLoading(false) }
                 .subscribe(
-                        { /* TODO OnNext */ },
-                        { /* TODO OnError */ }
+                        { liveData.value = MovieDetailsResponse(it) },
+                        { liveData.value = ErrorResponse(it) }
                 ))
     }
 }
