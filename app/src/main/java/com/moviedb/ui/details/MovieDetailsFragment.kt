@@ -56,8 +56,9 @@ class MovieDetailsFragment : BaseFragment() {
     }
 
     private fun displayDetails(data: MovieDetailData) {
+        if (data.tagline.isNotEmpty()) tagline.text = data.tagline else tagline.visibility = View.GONE
         overview.text = data.overview
-        release_date.text = data.releaseDate
-        average_rating.text = data.voteAverage.toString()
+        release_date.text = getString(R.string.release_date, data.releaseDate)
+        average_rating.text = getString(R.string.ave_rating, data.voteAverage.toInt(), data.voteCount)
     }
 }

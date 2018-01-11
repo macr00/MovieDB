@@ -3,4 +3,6 @@
     <string name="search">Search</string>
     <string name="year">Year: %1$d</string>
     <string name="all">All</string>
+    <string name="release_date">Release Date: %s</string>
+    <string name="ave_rating">Average Rating: %1$d (Total %2$d)</string>
 </resources>
