@@ -4,6 +4,7 @@ package com.moviedb.ui.details
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,6 +60,18 @@ class MovieDetailsFragment : BaseFragment() {
         if (data.tagline.isNotEmpty()) tagline.text = data.tagline else tagline.visibility = View.GONE
         overview.text = data.overview
         release_date.text = getString(R.string.release_date, data.releaseDate)
-        average_rating.text = getString(R.string.ave_rating, data.voteAverage.toInt(), data.voteCount)
+        average_rating.text = getString(R.string.ave_rating, data.voteAverage.toString(), data.voteCount)
+        Log.d("Genres", data.genres.toString())
+
+        if (data.genres.isEmpty()) {
+            genres.visibility = View.GONE
+        } else {
+            val sb = StringBuilder()
+            data.genres.forEach {
+                sb.append(", " + it.name)
+            }
+            val genreList = sb.toString().replaceFirst(", ", "")
+            genres.text = getString(R.string.genres, genreList)
+        }
     }
 }
