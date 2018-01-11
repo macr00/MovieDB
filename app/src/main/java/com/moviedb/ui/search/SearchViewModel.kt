@@ -30,6 +30,10 @@ class SearchViewModel(
         interactor.year = year
     }
 
+    fun clearQuery() {
+        interactor.query = ""
+    }
+
     fun searchMovies(year: Int?) {
         if (!isLoading) {
             disposables.add(searchMovieDisposable(interactor

@@ -30,18 +30,23 @@ class MovieListActivity : BaseFragmentActivity(),
 
     companion object {
         const val YEAR = "YEAR_KEY"
+        const val QUERY = "QUERY_KEY"
+        const val SEARCHVIEW_OPEN = "SEARCHVIEW OPEN"
     }
 
     @Inject
     lateinit var movieListViewModelFactory: MovieListViewModelFactory
-    lateinit private var movieListViewModel: MovieListViewModel
+    lateinit var movieListViewModel: MovieListViewModel
 
     @Inject
     lateinit var searchViewModelFactory: SearchViewModelFactory
-    lateinit private var searchViewModel: SearchViewModel
-    lateinit private var searchView: SearchView
+    lateinit var searchViewModel: SearchViewModel
 
+    lateinit private var searchItem: MenuItem
+    lateinit private var searchView: SearchView
     lateinit private var yearSpinner: Spinner
+    private var queryText: String = ""
+    private var searchOpen: Boolean = false
     private val years = mutableListOf<String>()
 
     override fun getActivity(): BaseFragmentActivity = this
@@ -54,31 +59,40 @@ class MovieListActivity : BaseFragmentActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initViewModels()
+        queryText = savedInstanceState?.getString(QUERY, "") ?: ""
+        searchOpen = savedInstanceState?.getBoolean(SEARCHVIEW_OPEN, false) ?: false
         val position = savedInstanceState?.getInt(YEAR, 0) ?: 0
         setUpYearSpinner(position)
+        movieListViewModel.getAllMovies(getSelectedYear())
+    }
+
+    private fun initViewModels() {
         movieListViewModel = ViewModelProviders
                 .of(this, movieListViewModelFactory)
                 .get(MovieListViewModel::class.java)
+
+        searchViewModel = ViewModelProviders
+                .of(this, searchViewModelFactory)
+                .get(SearchViewModel::class.java)
                 .apply {
-                    getAllMovies(getSelectedYear())
+                    response.observe(this@MovieListActivity, Observer { onLiveDataUpdated(it) })
                 }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
-        val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
+        searchItem = menu.findItem(R.id.menu_item_search)
         searchItem.setOnActionExpandListener(this@MovieListActivity)
         searchView = searchItem.actionView as SearchView
-        searchViewModel = ViewModelProviders
-                .of(this, searchViewModelFactory)
-                .get(SearchViewModel::class.java)
-                .apply {
-                    searchMovies(RxSearchView
-                            .queryTextChanges(searchView)
-                            .toFlowable(BackpressureStrategy.LATEST))
-                }
+        searchViewModel.searchMovies(RxSearchView
+                .queryTextChanges(searchView)
+                .toFlowable(BackpressureStrategy.LATEST))
 
-        searchViewModel.response.observe(this, Observer { onLiveDataUpdated(it) })
+        if (searchOpen) {
+            searchItem.expandActionView()
+            searchView.setQuery(queryText, false)
+        }
 
         return true
     }
@@ -91,12 +105,15 @@ class MovieListActivity : BaseFragmentActivity(),
     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
         supportFragmentManager.popBackStack()
         movieListViewModel.getAllMovies(getSelectedYear())
+        searchViewModel.clearQuery()
         return true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(YEAR, yearSpinner.selectedItemPosition)
+        outState.putString(QUERY, searchView.query?.toString())
+        outState.putBoolean(SEARCHVIEW_OPEN, searchItem.isActionViewExpanded)
     }
 
     private fun onLiveDataUpdated(response: Response?) {
