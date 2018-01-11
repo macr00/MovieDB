@@ -3,6 +3,7 @@ package com.moviedb.ui.list
 
 import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.interactors.GetAllMoviesInteractor
+import com.moviedb.domain.interactors.GetAllMoviesInteractorImpl
 import com.moviedb.domain.pagination.MovieResultsPagination
 import com.moviedb.domain.pagination.Pagination
 import com.moviedb.domain.usecase.GetMovieListUseCase
@@ -20,7 +21,7 @@ class MovieListModule {
 
     @Provides
     fun provideGetAllMoviesInteractor(pagination: Pagination<MovieListResponseData>): GetAllMoviesInteractor {
-        return GetAllMoviesInteractor(pagination, null)
+        return GetAllMoviesInteractorImpl(pagination, null)
     }
 
     @Provides

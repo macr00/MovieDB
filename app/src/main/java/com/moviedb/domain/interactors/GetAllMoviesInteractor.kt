@@ -3,7 +3,9 @@ package com.moviedb.domain.interactors
 import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.pagination.Pagination
 
-data class GetAllMoviesInteractor(
+interface GetAllMoviesInteractor: MovieListInteractor, Pagination<MovieListResponseData>
+
+data class GetAllMoviesInteractorImpl(
         val pagination: Pagination<MovieListResponseData>,
         override var year: Int?
-): MovieListInteractor, Pagination<MovieListResponseData> by pagination
+): GetAllMoviesInteractor, Pagination<MovieListResponseData> by pagination
