@@ -1,7 +1,8 @@
 package com.moviedb.ui.search
 
-import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.interactors.SearchMoviesInteractor
+import com.moviedb.domain.model.MovieListResponseData
+import com.moviedb.domain.interactors.SearchMoviesInteractorData
 import com.moviedb.domain.schedulers.RxSchedulers
 import com.moviedb.domain.usecase.SearchMoviesUseCase
 import com.moviedb.domain.usecase.UseCase
@@ -20,7 +21,7 @@ class SearchModule {
 
     @Provides
     fun provideSearchMoviesInteractor(pagination: SearchPagination): SearchMoviesInteractor {
-        return SearchMoviesInteractor(pagination, null)
+        return SearchMoviesInteractorData(pagination, null)
     }
 
     @Provides

@@ -1,8 +1,9 @@
 package com.moviedb.ui.search
 
 import android.util.Log
-import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.interactors.SearchMoviesInteractor
+import com.moviedb.domain.model.MovieListResponseData
+import com.moviedb.domain.interactors.SearchMoviesInteractorData
 import com.moviedb.domain.schedulers.RxSchedulers
 import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModel
