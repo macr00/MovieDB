@@ -1,7 +1,7 @@
 package com.moviedb.data
 
-import com.moviedb.data.model.MovieDetailData
-import com.moviedb.data.model.MovieListResponseData
+import com.moviedb.domain.model.MovieDetailData
+import com.moviedb.domain.model.MovieListResponseData
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path

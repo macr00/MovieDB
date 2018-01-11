@@ -1,14 +1,14 @@
-package com.moviedb.data.model
+package com.moviedb.domain.model
 
-data class MovieListItemData(
+class MovieDetailData(
         val id: Long,
         val releaseDate: String,
         val title: String,
+        val tagline: String,
         val overview: String,
-        val originalLanguage: String,
         val posterPath: String,
         val backdropPath: String,
-        val genreIds: List<Int>,
+        val genres: List<GenreData>,
         val voteCount: Int,
         val voteAverage: Double,
         val adult: Boolean

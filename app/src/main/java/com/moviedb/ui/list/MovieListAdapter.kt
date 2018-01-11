@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.moviedb.R
-import com.moviedb.data.model.MovieListItemData
+import com.moviedb.domain.model.MovieListItemData
 import com.moviedb.ui.base.BaseListAdapter
 import kotlinx.android.synthetic.main.movie_list_item.view.*
 

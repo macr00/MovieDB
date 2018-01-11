@@ -1,12 +1,10 @@
 package com.moviedb.ui.search
 
-import com.moviedb.data.model.MovieListResponseData
+import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.interactors.SearchMoviesInteractor
 import com.moviedb.domain.schedulers.RxSchedulers
 import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModelFactory
-import com.moviedb.domain.pagination.MovieResultsPagination
-import com.moviedb.domain.pagination.SearchPagination
 import javax.inject.Inject
 
 

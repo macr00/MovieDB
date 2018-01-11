@@ -1,7 +1,7 @@
 package com.moviedb.data
 
-import com.moviedb.data.model.MovieDetailData
-import com.moviedb.data.model.MovieListResponseData
+import com.moviedb.domain.model.MovieDetailData
+import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.MovieRepository
 import com.moviedb.domain.schedulers.RxSchedulers
 import io.reactivex.Flowable

@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.moviedb.R
-import com.moviedb.data.model.MovieListItemData
+import com.moviedb.domain.model.MovieListItemData
 import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.common.*
 import com.moviedb.ui.details.MovieDetailsActivity

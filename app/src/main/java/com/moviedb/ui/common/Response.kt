@@ -1,7 +1,7 @@
 package com.moviedb.ui.common
 
-import com.moviedb.data.model.MovieDetailData
-import com.moviedb.data.model.MovieListResponseData
+import com.moviedb.domain.model.MovieDetailData
+import com.moviedb.domain.model.MovieListResponseData
 
 
 sealed class Response

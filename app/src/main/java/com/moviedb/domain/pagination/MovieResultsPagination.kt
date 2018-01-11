@@ -1,7 +1,6 @@
 package com.moviedb.domain.pagination
 
-import com.moviedb.data.model.MovieListResponseData
-import javax.inject.Inject
+import com.moviedb.domain.model.MovieListResponseData
 
 open class MovieResultsPagination : Pagination<MovieListResponseData> {
 

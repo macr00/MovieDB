@@ -1,6 +1,6 @@
 package com.moviedb.domain.interactors
 
-import com.moviedb.data.model.MovieListResponseData
+import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.pagination.Pagination
 
 data class GetAllMoviesInteractor(

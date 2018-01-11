@@ -1,7 +1,7 @@
 package com.moviedb.ui.list
 
 
-import com.moviedb.data.model.MovieListResponseData
+import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.interactors.GetAllMoviesInteractor
 import com.moviedb.domain.pagination.MovieResultsPagination
 import com.moviedb.domain.pagination.Pagination

@@ -1,7 +1,7 @@
 package com.moviedb.domain
 
-import com.moviedb.data.model.MovieDetailData
-import com.moviedb.data.model.MovieListResponseData
+import com.moviedb.domain.model.MovieDetailData
+import com.moviedb.domain.model.MovieListResponseData
 import io.reactivex.Flowable
 
 interface MovieRepository {

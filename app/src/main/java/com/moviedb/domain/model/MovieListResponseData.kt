@@ -1,4 +1,4 @@
-package com.moviedb.data.model
+package com.moviedb.domain.model
 
 data class MovieListResponseData(
       val page: Int,

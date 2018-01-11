@@ -1,6 +1,6 @@
 package com.moviedb.domain.usecase
 
-import com.moviedb.data.model.MovieListResponseData
+import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.MovieRepository
 import com.moviedb.domain.interactors.SearchMoviesInteractor
 import com.moviedb.domain.schedulers.RxSchedulers
