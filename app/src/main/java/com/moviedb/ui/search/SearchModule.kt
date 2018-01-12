@@ -30,12 +30,17 @@ class SearchModule {
     }
 
     @Provides
+    fun provideRxQuery(schedulers: RxSchedulers): RxQuery {
+        return RxQueryImpl(schedulers)
+    }
+
+    @Provides
     fun provideViewModelFactory(
             searchUseCase: UseCase<SearchMoviesInteractor, MovieListResponseData>,
             interactor: SearchMoviesInteractor,
-            schedulers: RxSchedulers
+            rxQuery: RxQuery
     ): SearchViewModelFactory {
-        return SearchViewModelFactory(searchUseCase, interactor , schedulers)
+        return SearchViewModelFactory(searchUseCase, interactor , rxQuery)
     }
 
 }

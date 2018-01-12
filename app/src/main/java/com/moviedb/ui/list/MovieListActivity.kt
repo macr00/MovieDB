@@ -85,9 +85,7 @@ class MovieListActivity : BaseFragmentActivity(),
         searchItem = menu.findItem(R.id.menu_item_search)
         searchItem.setOnActionExpandListener(this@MovieListActivity)
         searchView = searchItem.actionView as SearchView
-        searchViewModel.searchMovies(RxSearchView
-                .queryTextChanges(searchView)
-                .toFlowable(BackpressureStrategy.LATEST))
+        searchViewModel.searchMovies(RxSearchView.queryTextChanges(searchView))
 
         if (searchOpen) {
             searchItem.expandActionView()

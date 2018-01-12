@@ -3,27 +3,25 @@ package com.moviedb.ui.search
 import android.util.Log
 import com.moviedb.domain.interactors.SearchMoviesInteractor
 import com.moviedb.domain.model.MovieListResponseData
-import com.moviedb.domain.interactors.SearchMoviesInteractorData
-import com.moviedb.domain.schedulers.RxSchedulers
 import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModel
 import com.moviedb.ui.common.NextPageScrollListener
 import com.moviedb.ui.common.MovieListResponse
 import io.reactivex.Flowable
-import java.util.concurrent.TimeUnit
+import io.reactivex.Observable
 
 
 class SearchViewModel(
         private val searchUseCase: UseCase<SearchMoviesInteractor, MovieListResponseData>,
         private val interactor: SearchMoviesInteractor,
-        private val schedulers: RxSchedulers
+        private val rxQuery: RxQuery
 ) : BaseViewModel(), NextPageScrollListener {
 
     private var isLoading: Boolean = false
 
     override fun loadNextPage() {
         if (!isLoading) {
-            disposables.add(searchMovieDisposable(interactor).subscribe())
+            disposables.add(searchMovieFlowable(interactor).subscribe())
         }
     }
 
@@ -37,8 +35,8 @@ class SearchViewModel(
 
     fun searchMovies(year: Int?) {
         if (!isLoading) {
-            disposables.add(searchMovieDisposable(interactor
-                    .apply {
+            disposables.add(searchMovieFlowable(
+                    interactor.apply {
                         resetPagination()
                         this.year = year
                     }
@@ -46,21 +44,19 @@ class SearchViewModel(
         }
     }
 
-    fun searchMovies(queryChars: Flowable<CharSequence>) {
-        disposables.add(queryChars
-                .debounce(500, TimeUnit.MILLISECONDS, schedulers.computation)
-                .filter { it.length > 1 }
-                .map { chars ->
+    fun searchMovies(queryChars: Observable<CharSequence>) {
+        disposables.add(rxQuery.asFlowable(queryChars)
+                .map {
                     interactor.apply {
                         resetPagination()
-                        this.query = chars.toString().trim { it <= ' ' }
+                        query = it
                     }
                 }
-                .switchMap { searchMovieDisposable(it) }
+                .switchMap { searchMovieFlowable(it) }
                 .subscribe())
     }
 
-    private fun searchMovieDisposable(interactor: SearchMoviesInteractor): Flowable<MovieListResponseData> {
+    internal fun searchMovieFlowable(interactor: SearchMoviesInteractor): Flowable<MovieListResponseData> {
         return searchUseCase.execute(interactor)
                 .doOnSubscribe { onLoading(true) }
                 .doOnTerminate { onLoading(false) }

@@ -6,13 +6,13 @@ import io.reactivex.schedulers.TestScheduler
 import io.reactivex.schedulers.Schedulers
 
 
-class RxSchedulersTest: RxSchedulers {
-    override val ui: Scheduler = TestScheduler()
-    override val io: Scheduler = TestScheduler()
-    override val computation: Scheduler = TestScheduler()
+class RxSchedulersTest(tester: TestScheduler) : RxSchedulers {
+    override val ui: Scheduler = tester
+    override val io: Scheduler = tester
+    override val computation: Scheduler = tester
 }
 
-class RxSchedulersTrampoline: RxSchedulers {
+class RxSchedulersTrampoline : RxSchedulers {
     override val ui: Scheduler = Schedulers.trampoline()
     override val io: Scheduler = Schedulers.trampoline()
     override val computation: Scheduler = Schedulers.trampoline()

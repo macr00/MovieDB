@@ -13,11 +13,11 @@ class SearchViewModelFactory
 @Inject constructor(
         private val searchUseCase: UseCase<SearchMoviesInteractor, MovieListResponseData>,
         private val interactor: SearchMoviesInteractor,
-        private val schedulers: RxSchedulers
+        private val rxQuery: RxQuery
 ) : BaseViewModelFactory<SearchViewModel>() {
 
     override val viewModel: SearchViewModel by lazy {
-        SearchViewModel(searchUseCase, interactor, schedulers)
+        SearchViewModel(searchUseCase, interactor, rxQuery)
     }
 
     override val vmClass: Class<SearchViewModel> = SearchViewModel::class.java
