@@ -26,6 +26,8 @@ class MovieListFragment : BaseFragment() {
     lateinit private var movieListViewModel: MovieListViewModel
     lateinit private var recyclerViewDelegate: RecyclerViewDelegate<MovieListItemData>
 
+    private var recreatedFromSavedState: Boolean = false
+
     override val fragment: BaseFragment = this
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -36,6 +38,7 @@ class MovieListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recreatedFromSavedState = (savedInstanceState != null)
         recyclerViewDelegate = RecyclerViewDelegate(
                 recyclerView = movies_rv,
                 llm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false),
@@ -55,9 +58,9 @@ class MovieListFragment : BaseFragment() {
         movies_rv.addOnScrollListener(InfiniteScrollListener({ movieListViewModel.loadNextPage() }))
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(LIST_STATE, recyclerViewDelegate.llm.onSaveInstanceState())
+        outState?.putParcelable(LIST_STATE, recyclerViewDelegate.llm.onSaveInstanceState())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -69,22 +72,18 @@ class MovieListFragment : BaseFragment() {
     override fun onLiveDataUpdated(response: Response?) {
         response?.let {
             when (it) {
-                is ErrorResponse -> {
-                }
-                is MovieListResponse -> {
-                    updateList(it)
-                }
+                is ErrorResponse -> { }
+                is FreshMovieListResponse -> recyclerViewDelegate.freshData(it.data)
+                is NextPageMovieListResponse -> updateList(it)
             }
         }
     }
 
-    private fun updateList(response: MovieListResponse) {
-        response.data.let {
-            if (it.page == 1) {
-                recyclerViewDelegate.freshData(it.results)
-            } else {
-                recyclerViewDelegate.addItems(it.results)
-            }
+    private fun updateList(response: NextPageMovieListResponse) {
+        if (recreatedFromSavedState) {
+            recyclerViewDelegate.freshData(response.data)
+        } else {
+            recyclerViewDelegate.addItems(response.data)
         }
     }
 

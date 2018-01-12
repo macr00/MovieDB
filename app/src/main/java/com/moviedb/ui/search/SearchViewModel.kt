@@ -2,11 +2,13 @@ package com.moviedb.ui.search
 
 import android.util.Log
 import com.moviedb.domain.interactors.SearchMoviesInteractor
+import com.moviedb.domain.model.MovieListItemData
 import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModel
 import com.moviedb.ui.common.NextPageScrollListener
-import com.moviedb.ui.common.MovieListResponse
+import com.moviedb.ui.common.FreshMovieListResponse
+import com.moviedb.ui.common.NextPageMovieListResponse
 import io.reactivex.Flowable
 import io.reactivex.Observable
 
@@ -17,6 +19,7 @@ class SearchViewModel(
         private val rxQuery: RxQuery
 ) : BaseViewModel(), NextPageScrollListener {
 
+    private var results: MutableList<MovieListItemData>? = null
     private var isLoading: Boolean = false
 
     override fun loadNextPage() {
@@ -68,7 +71,13 @@ class SearchViewModel(
     private fun onSuccess(data: MovieListResponseData) {
         Log.d("List Result", data.toString())
         data.let {
-            liveData.value = MovieListResponse(it)
+            if (it.page == 1) {
+                results = it.results.toMutableList()
+                results?.let { liveData.value = FreshMovieListResponse(it) }
+            } else {
+                results?.addAll(it.results)
+                results?.let { liveData.value = NextPageMovieListResponse(it) }
+            }
         }
     }
 

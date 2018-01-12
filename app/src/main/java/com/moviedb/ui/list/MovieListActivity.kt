@@ -15,12 +15,11 @@ import com.moviedb.R
 import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.base.BaseFragmentActivity
 import com.moviedb.ui.common.ErrorResponse
-import com.moviedb.ui.common.MovieListResponse
+import com.moviedb.ui.common.FreshMovieListResponse
 import com.moviedb.ui.common.Response
 import com.moviedb.ui.search.SearchFragment
 import com.moviedb.ui.search.SearchViewModel
 import com.moviedb.ui.search.SearchViewModelFactory
-import io.reactivex.BackpressureStrategy
 import kotlinx.android.synthetic.main.activity_movie_list.*
 import java.util.*
 import javax.inject.Inject
@@ -119,7 +118,7 @@ class MovieListActivity : BaseFragmentActivity(),
             when (it) {
                 is ErrorResponse -> {
                 }
-                is MovieListResponse -> {
+                is FreshMovieListResponse -> {
                     addSearchFragment()
                 }
             }

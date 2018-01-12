@@ -27,6 +27,8 @@ class SearchFragment : BaseFragment() {
     lateinit private var searchViewModel: SearchViewModel
     lateinit private var recyclerViewDelegate: RecyclerViewDelegate<MovieListItemData>
 
+    private var recreatedFromSavedState: Boolean = false
+
     override val fragment: BaseFragment = this
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -36,6 +38,7 @@ class SearchFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recreatedFromSavedState = (savedInstanceState != null)
         recyclerViewDelegate = RecyclerViewDelegate(
                 recyclerView = search_results_rv,
                 llm = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false),
@@ -67,18 +70,17 @@ class SearchFragment : BaseFragment() {
         response?.let {
             when(it) {
                 is ErrorResponse -> { }
-                is MovieListResponse -> { updateList(it) }
+                is FreshMovieListResponse -> recyclerViewDelegate.freshData(it.data)
+                is NextPageMovieListResponse -> updateList(it)
             }
         }
     }
 
-    private fun updateList(response: MovieListResponse) {
-        response.data.let {
-            if (it.page == 1) {
-                recyclerViewDelegate.freshData(it.results)
-            } else {
-                recyclerViewDelegate.addItems(it.results)
-            }
+    private fun updateList(response: NextPageMovieListResponse) {
+        if (recreatedFromSavedState) {
+            recyclerViewDelegate.freshData(response.data)
+        } else {
+            recyclerViewDelegate.addItems(response.data)
         }
     }
 
