@@ -70,17 +70,17 @@ class SearchFragment : BaseFragment() {
         response?.let {
             when(it) {
                 is ErrorResponse -> { }
-                is FreshMovieListResponse -> recyclerViewDelegate.freshData(it.data)
-                is NextPageMovieListResponse -> updateList(it)
+                is FreshSearchResponse -> recyclerViewDelegate.freshData(it.data)
+                is NextPageSearchResponse -> updateList(it.data)
             }
         }
     }
 
-    private fun updateList(response: NextPageMovieListResponse) {
+    private fun updateList(results: List<MovieListItemData>) {
         if (recreatedFromSavedState) {
-            recyclerViewDelegate.freshData(response.data)
+            recyclerViewDelegate.freshData(results)
         } else {
-            recyclerViewDelegate.addItems(response.data)
+            recyclerViewDelegate.addItems(results)
         }
     }
 

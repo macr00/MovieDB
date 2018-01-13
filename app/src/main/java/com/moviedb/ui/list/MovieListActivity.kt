@@ -16,6 +16,7 @@ import com.moviedb.ui.base.BaseFragment
 import com.moviedb.ui.base.BaseFragmentActivity
 import com.moviedb.ui.common.ErrorResponse
 import com.moviedb.ui.common.FreshMovieListResponse
+import com.moviedb.ui.common.FreshSearchResponse
 import com.moviedb.ui.common.Response
 import com.moviedb.ui.search.SearchFragment
 import com.moviedb.ui.search.SearchViewModel
@@ -53,11 +54,14 @@ class MovieListActivity : BaseFragmentActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initViewModels()
-        queryText = savedInstanceState?.getString(QUERY, "") ?: ""
-        searchOpen = savedInstanceState?.getBoolean(SEARCH_OPEN, false) ?: false
-        savedSpinnerPosition = savedInstanceState?.getInt(YEAR, 0) ?: 0
+        savedInstanceState?.let {
+            queryText = it.getString(QUERY, "")
+            searchOpen = it.getBoolean(SEARCH_OPEN, false)
+            savedSpinnerPosition = it.getInt(YEAR, 0)
+        }
         setUpYearSpinner(savedSpinnerPosition)
+        initViewModels()
+
         if (savedInstanceState == null) {
             movieListViewModel.getAllMovies(getSelectedYear())
         }
@@ -95,11 +99,13 @@ class MovieListActivity : BaseFragmentActivity(),
     }
 
     override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+        searchOpen = true
         searchViewModel.setYear(getSelectedYear())
         return true
     }
 
     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+        searchOpen = false
         supportFragmentManager.popBackStack()
         movieListViewModel.getAllMovies(getSelectedYear())
         searchViewModel.clearQuery()
@@ -110,15 +116,13 @@ class MovieListActivity : BaseFragmentActivity(),
         super.onSaveInstanceState(outState)
         outState.putInt(YEAR, yearSpinner.selectedItemPosition)
         outState.putString(QUERY, searchView.query?.toString())
-        outState.putBoolean(SEARCH_OPEN, searchItem.isActionViewExpanded)
+        outState.putBoolean(SEARCH_OPEN, searchOpen)
     }
 
     private fun onLiveDataUpdated(response: Response?) {
         response?.let {
             when (it) {
-                is ErrorResponse -> {
-                }
-                is FreshMovieListResponse -> {
+                is FreshSearchResponse -> {
                     addSearchFragment()
                 }
             }
@@ -126,12 +130,12 @@ class MovieListActivity : BaseFragmentActivity(),
     }
 
     private fun addSearchFragment() {
-        if (!searchDisplayed()) {
+        if (searchOpen && !searchFragmentIsDisplayed()) {
             addFragment(getContainerId(), SearchFragment())
         }
     }
 
-    private fun searchDisplayed(): Boolean {
+    private fun searchFragmentIsDisplayed(): Boolean {
         return supportFragmentManager.findFragmentById(getContainerId()) is SearchFragment
     }
 
@@ -155,7 +159,7 @@ class MovieListActivity : BaseFragmentActivity(),
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
         if (savedSpinnerPosition != position) {
-            if (searchDisplayed()) {
+            if (searchOpen) {
                 searchViewModel.searchMovies(years[position].toIntOrNull())
             } else {
                 movieListViewModel.getAllMovies(years[position].toIntOrNull())

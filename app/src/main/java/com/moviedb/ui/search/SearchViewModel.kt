@@ -6,9 +6,7 @@ import com.moviedb.domain.model.MovieListItemData
 import com.moviedb.domain.model.MovieListResponseData
 import com.moviedb.domain.usecase.UseCase
 import com.moviedb.ui.base.BaseViewModel
-import com.moviedb.ui.common.NextPageScrollListener
-import com.moviedb.ui.common.FreshMovieListResponse
-import com.moviedb.ui.common.NextPageMovieListResponse
+import com.moviedb.ui.common.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 
@@ -73,10 +71,10 @@ class SearchViewModel(
         data.let {
             if (it.page == 1) {
                 results = it.results.toMutableList()
-                results?.let { liveData.value = FreshMovieListResponse(it) }
+                results?.let { liveData.value = FreshSearchResponse(it) }
             } else {
                 results?.addAll(it.results)
-                results?.let { liveData.value = NextPageMovieListResponse(it) }
+                results?.let { liveData.value = NextPageSearchResponse(it) }
             }
         }
     }
